@@ -76,7 +76,7 @@ sudo mkdir /repo
 sudo chown $USER:$USER -R /repo
 ```
 
-#### Clone repo `awesome-raspberrypi-networkconfig`
+#### Clone repo `RasPiNetTool`
 ```shell
 cd /repo
 git clone https://github.com/AppBlocksHQ/RasPiNetTool.git
