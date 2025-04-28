@@ -1,4 +1,4 @@
-# awesome-raspberrypi-networkconfig
+# RasPiNetTool
 This repository includes scripts to configure the eth0 (Ethernet) and wlan0 (Wi-Fi) interfaces, using iwd as a modern alternative to wpa_supplicant for wireless network management.
 
 ***
@@ -79,7 +79,7 @@ sudo chown $USER:$USER -R /repo
 #### Clone repo `awesome-raspberrypi-networkconfig`
 ```shell
 cd /repo
-git clone git@github.com:imcase/awesome-raspberrypi-networkconfig.git
+git clone https://github.com/AppBlocksHQ/RasPiNetTool.git
 ```
 
 ***
@@ -87,7 +87,7 @@ git clone git@github.com:imcase/awesome-raspberrypi-networkconfig.git
 ## Configure Network
 #### Configure Ethernet eth0
 ```shell
-cd /repo/awesome-raspberrypi-networkconfig
+cd /repo/RasPiNetTool
 sudo ./main.sh
 ```
 
