@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Retrieve the current directory of the script
+REPO_DIR=$(dirname "$(realpath "$0")")
+
 # Check if running as root or with sudo
 if [[ "${EUID}" -ne 0 ]]; then
     echo -e "\r"
@@ -40,7 +43,7 @@ while true; do
             echo "---[STATUS]: Starting Ethernet Configuration..."
             sleep 1
 
-            ./scripts/ethernet_config.sh
+            ${REPO_DIR}/scripts/ethernet_config.sh
 
             echo -e "\r"
             ;;
@@ -49,7 +52,7 @@ while true; do
             echo "---[STATUS]: Starting WiFi Configuration..."
             sleep 1
 
-            ./scripts/wifi_config.sh
+            ${REPO_DIR}/scripts/wifi_config.sh
 
             echo -e "\r"
             ;;
