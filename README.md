@@ -1,5 +1,5 @@
 # RasPiNetTool
-This repository includes scripts to configure the eth0 (Ethernet) and wlan0 (Wi-Fi) interfaces, using iwd as a modern alternative to wpa_supplicant for wireless network management.
+Easily manage Ethernet and Wi-Fi connections using nmcli on a Raspberry Pi, which runs OpenCV and Appblocks tools to visualize and control the Appblocks Demo Kit (ADK). Curious? Check out https://appblocks.io/.
 
 ***
 
