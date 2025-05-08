@@ -17,7 +17,7 @@ https://www.raspberrypi.com/documentation/computers/raspberry-pi.html
 ***
 
 ## USB-to-UART
-For the ones who want to enable serial communication via USB-to-UART on your Raspberry Pi, add the following lines to the [all] section of the config.txt file:
+To enable serial communication via USB-to-UART on a Raspberry Pi, add the following lines to the [all] section of the config.txt file:
 ```
 [all]
 enable_uart=1
@@ -29,7 +29,7 @@ This configuration activates the UART interface and disables Bluetooth, freeing 
 
 ## Initial Setup
 #### Connect to the Raspberry-Pi
-Using your favorite terminal, connect to the Raspberry-Pi via `serial` or `ssh`.
+Using your preferred terminal application, connect to the Raspberry Pi via serial or SSH.
 
 #### Disable & Stop userconfig.service
 ```shell
@@ -38,35 +38,28 @@ sudo systemctl stop userconfig.service
 ```
 
 #### Create __ssh__ `public` and `private` keys
-Generate private and public keys for your user-account:
+Generate a private and public key pair for your user account:
 ```shell
 ssh-keygen
 ```
 
-#### (Optional) Permit `root` SSH
+#### (Optional) Enable SSH login for the root user:
 ```shell
 sudo -S <<< "tibbo" sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
 sudo systemctl restart ssh
 ```
-
-Extract the public key:
-```shell
-cat ~/.ssh/id_rsa.pub
-```
-NOTE: you will need to add the content of public key __id_rsa.pub__ to the `SSH Keys` of your `Github account`.
 
 #### Update & Upgrade
 ```shell
 sudo apt update -y
 sudo apt upgrade -y
 ```
-NOTE: The duration of the upgrade process on a Raspberry Pi can vary significantly depending on the model, the number of packages to be updated, and the speed of your internet connection.
+NOTE: Upgrade time may vary depending on your Pi model, number of updates, and internet speed.
 
-#### Install apps
+#### Install git
 ```shell
 sudo apt install -y git
 ```
-
 ***
 
 ## Clone Repo
@@ -90,5 +83,4 @@ git clone https://github.com/AppBlocksHQ/RasPiNetTool.git
 cd /repo/RasPiNetTool
 sudo ./main.sh
 ```
-
 ***
