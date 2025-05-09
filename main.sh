@@ -3,6 +3,23 @@
 # Retrieve the current directory of the script
 REPO_DIR=$(dirname "$(realpath "$0")")
 
+
+# COLOR CONSTANTS
+FG_GREY='\e[90m'
+FG_RED='\e[31m'
+RESET='\e[0m'
+
+
+# CONSTANTS
+LAN_NIC_NAME="eth0"  # Default LAN interface
+WIFI_NIC_NAME="wlan0"  # Default WiFi interface
+
+
+# VARIABLES
+ethernetIsAvailable=false
+wifiIsAvailable=false
+
+
 # Check if running as root or with sudo
 if [[ "${EUID}" -ne 0 ]]; then
     echo -e "\r"
@@ -21,8 +38,20 @@ display_menu() {
     echo "----------------------------------------"
     echo "        Network Configuration           "
     echo "----------------------------------------"
-    echo "1. Ethernet"
-    echo "2. WiFi"
+    if ip a | grep -q "${LAN_NIC_NAME}"; then
+        echo "1. Ethernet"
+
+        ethernetIsAvailable=true
+    else
+        echo -e "${FG_GREY}1. Ethernet (${FG_RED}Not ${FG_GREY}Available)${RESET}"
+    fi
+    if ip a | grep -q "${WIFI_NIC_NAME}"; then
+        echo "2. WiFi"
+
+        wifiIsAvailable=true
+    else
+        echo -e "${FG_GREY}2. Wifi (${FG_RED}Not ${FG_GREY}Available)${RESET}"
+    fi
     echo "----------------------------------------"
     echo "q. Quit"
     echo -e "\r"
@@ -39,6 +68,14 @@ while true; do
     # Process the user's choice
     case "${choice}" in
         1)
+            if [[ "${ethernetIsAvailable}" == false ]]; then
+                echo -e "\r"
+                echo "***[ERROR]: Ethernet is not available on this system."
+                echo -e "\r"
+                sleep 1
+                continue
+            fi
+        
             echo -e "\r"
             echo "---[STATUS]: Starting Ethernet Configuration..."
             sleep 1
@@ -48,6 +85,14 @@ while true; do
             echo -e "\r"
             ;;
         2)
+            if [[ "${wifiIsAvailable}" == false ]]; then
+                echo -e "\r"
+                echo "***[ERROR]: WiFi is not available on this system."
+                echo -e "\r"
+                sleep 1
+                continue
+            fi
+
             echo -e "\r"
             echo "---[STATUS]: Starting WiFi Configuration..."
             sleep 1
