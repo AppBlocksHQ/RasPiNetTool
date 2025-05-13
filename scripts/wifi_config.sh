@@ -5,6 +5,7 @@ trap 'echo -e "\r\nWiFi configuration canceled. Returning to main menu...\r\n"; 
 
 #---CONSTANTS
 AUTO="auto"
+DONE="DONE"
 MANUAL="manual"
 NIC_TYPE="wifi"
 NIC_NAME="wlan0"
@@ -199,7 +200,7 @@ validateIpAddressInUse() {
     local ip_part=${ip%/*}
     
     # Check if IP is already in use
-    if ip a | grep -q "inet ${ip_part}/"; then
+    if ip a | grep -v "${NIC_NAME}" | grep -q "inet ${ip_part}/"; then
         echo "***[ERROR]: IP address ${ip_part} is already in use on this system" >&2
         return 1
     fi
@@ -210,7 +211,7 @@ validateMetricInUse() {
     local metric=${1}
     
     # Check if metric is already in use
-    if ip route show default | grep -q "metric ${metric}"; then
+    if ip route show default | grep -v "${NIC_NAME}" | grep -q "metric ${metric}"; then
         echo "***[ERROR]: Metric ${metric} is already in use by another route" >&2
         return 1
     fi
@@ -740,28 +741,38 @@ changeNetworkConfigToStaticIp() {
     echo "---[STATUS]: Changing network configuration to *STATIC-IP*..."
     
     # Get and validate user input
-    local static_ip=""
+    local static_ips=()
     local gateway=""
     local dns=""
     local metric=""
     
-    # Get static IP and validate it's not in use
+    # Get multiple static IPs
+    echo "---[INFO]: You can add multiple IP addresses. Enter 'done' when finished."
     while true; do
-        static_ip=$(getValidInput "${INPUT_STATIC_IP}" validateIpAddress)
-
-        echo "---[STATUS]: Checking if ${static_ip} is not in use on this system..."
-
-        if validateIpAddressInUse "${static_ip}"; then
-            echo "---[STATUS]: IP address ${static_ip} is available and can be used"
+        read -e -p "${INPUT_STATIC_IP} ('${DONE}' to finish): " ip_input
+        
+        if [[ "${ip_input}" == "${DONE}" ]]; then
+            if [[ ${#static_ips[@]} -eq 0 ]]; then
+                echo "***[ERROR]: At least one IP address is required"
+                continue
+            fi
             break
+        fi
+        
+        if validateIpAddress "${ip_input}"; then
+            echo "---[STATUS]: Checking if ${ip_input} is in use on this system..."
+            if validateIpAddressInUse "${ip_input}"; then
+                echo "---[UPDATE]: IP address ${ip_input} is available and can be used"
+                static_ips+=("${ip_input}")
+            fi
         fi
     done
     
-    # Get gateway and validate it's in the same subnet
+    # Get gateway and validate it's in the same subnet as the first IP
     while true; do
         gateway=$(getValidInput "${INPUT_GATEWAY}" validateSimpleIpAddress)
-        if validateGatewayInSubnet "${static_ip}" "${gateway}"; then
-            echo "---[STATUS]: Gateway ${gateway} is in the same subnet as ${static_ip}"
+        if validateGatewayInSubnet "${static_ips[0]}" "${gateway}"; then
+            echo "---[STATUS]: Gateway ${gateway} is in the same subnet as ${static_ips[0]}"
             break
         fi
     done
@@ -777,16 +788,20 @@ changeNetworkConfigToStaticIp() {
         fi
     done
     
+    # Join all IP addresses with commas for nmcli
+    local ip_addresses=$(IFS=","; echo "${static_ips[*]}")
+    
     # Modify the connection with static IP settings
     sudo nmcli connection modify "${NEWCONFIG}" \
         ipv4.method "${MANUAL}" \
-        ipv4.addresses "${static_ip}" \
+        ipv4.addresses "${ip_addresses}" \
         ipv4.gateway "${gateway}" \
         ipv4.dns "${dns}" \
         ipv4.route-metric "${metric}"
     
     echo -e "\r"
-    echo "---[INFO]: Network configuration changed to *STATIC IP* successfully"
+    echo "---[INFO]: Network configuration changed to *STATIC-IP* successfully"
+    echo "---[INFO]: Configured IP addresses: ${ip_addresses}"
     echo -e "\r"
 }
 
