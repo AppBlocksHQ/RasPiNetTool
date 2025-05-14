@@ -48,6 +48,11 @@ ssh-keygen
 sudo -S <<< "tibbo" sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
 sudo systemctl restart ssh
 ```
+Extract the public key:
+```shell
+cat ~/.ssh/id_rsa.pub
+```
+NOTE: you will need to add the content of public key __id_rsa.pub__ to the `SSH Keys` of your `Github account`.
 
 #### Update & Upgrade
 ```shell
