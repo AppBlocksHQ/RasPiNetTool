@@ -40,7 +40,7 @@ sudo systemctl stop userconfig.service
 #### Create __ssh__ `public` and `private` keys
 Generate a private and public key pair for your user account:
 ```shell
-ssh-keygen
+ssh-keygen -t rsa -b 4096
 ```
 
 #### (Optional) Enable SSH login for the root user:
