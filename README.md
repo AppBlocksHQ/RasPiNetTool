@@ -43,6 +43,14 @@ Generate a private and public key pair for your user account:
 ssh-keygen -t rsa -b 4096
 ```
 
+#### Edit /etc/ssh/sshd_config
+Enable PasswordAuthentication
+```shell
+sudo vim /etc/ssh/sshd_config
+# Find the line containing 'PasswordAuthentication'
+# Set change 'no' to 'yes'
+```
+
 #### (Optional) Enable SSH login for the root user:
 ```shell
 sudo -S <<< "tibbo" sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
