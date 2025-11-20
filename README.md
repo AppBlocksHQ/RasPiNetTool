@@ -3,16 +3,10 @@ Easily manage Ethernet and Wi-Fi connections using nmcli on a Raspberry Pi, whic
 
 ***
 
-## Powersupply
-Ensure your Raspberry Pi receives adequate power to prevent issues such as network instability or unexpected reboots. The power requirements and connectors differ between models:​
-For example:
-- Raspberry Pi 3: Utilizes a micro-USB connector and requires a power supply of 5.1V / 2.5A.​
-- Raspberry Pi 4: Utilizes a USB-C connector and requires a power supply of 5.1V / 3.0A.​
-
-Using a power supply that does not meet these specifications can lead to performance problems. For detailed hardware information and power requirements, refer to the official Raspberry Pi documentation: 
-```
-https://www.raspberrypi.com/documentation/computers/raspberry-pi.html
-```
+## Raspberry Pi Models
+Tested with the following models:
+- Raspberry Pi 1
+- Raspberry Pi 2
 
 ***
 
