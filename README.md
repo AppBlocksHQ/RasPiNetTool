@@ -46,9 +46,8 @@ ssh-keygen -t rsa -b 4096
 #### Edit /etc/ssh/sshd_config
 Enable PasswordAuthentication
 ```shell
-sudo vim /etc/ssh/sshd_config
-# Find the line containing 'PasswordAuthentication'
-# Set change 'no' to 'yes'
+sudo -S <<< "tibbo" sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+sudo systemctl restart ssh
 ```
 
 #### (Optional) Enable SSH login for the root user:
